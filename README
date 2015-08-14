@@ -1,0 +1,16 @@
+Here is a Dockerfile that can build a small docker image with Apache Celix in it for the Inaetics project. The purpose of this Dockerfile is to build fast the image and to have a "builder image" as small as possible.
+If you want more details you can see the comment in the Dockerfile or for even more details you can see this github : https://github.com/florian-gauvin/Dockerfile-that-build-a-small-Docker-Image-with-Apache-Celix-in-it . In this github there is dockerfile with all the steps and all the details about my work.
+
+To use this dockerfile :
+First, build the dockerfile by running the following command : docker build -t "name-of-the-celix-image-builder" .
+This will create a builder image of Apache Celix
+Then Run the following command :
+docker run -ti --privileged -v /var/run/docker.sock:/var/run/docker.sock name-of-the-celix-image-builder
+This will launch the builder image of Apache Celix and create automatically the small image with Apache Celix in it.
+The image is about 16MB
+Finally you will have a docker image named inaetics/celix-agent on your host, you can check by running the following command :
+"docker images"
+
+BE CAREFUL :
+-You need to have the same docker version than there is in the image, in the image I'm
+using the latest version of docker by running the following command : wget -qO- https://get.docker.com/ | sh
