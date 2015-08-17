@@ -7,8 +7,11 @@ ENV DEBIAN_FRONTEND noninteractive
 #Download all the packages needed
 
 RUN apt-get update && apt-get install -y \
-	cmake \
 	curl \
+	uuid-dev \
+	g++ \
+	libcurl4-openssl-dev \
+	cmake \
 	git \
 	python \
 	wget \
@@ -45,6 +48,10 @@ ADD resources /usr/rootfs.tar-celix/tmp
 #Build Celix and link against the libraries in the buildroot environment. It's not a real good way to do so but it's the only one that I have found : I remove the link.txt file and replace it by one created manualy and not during the configuration, otherwise I don't have all the libraries linked against the environment in buildroot
 
 WORKDIR /usr/celix-build
+
+RUN apt-get -y install uuid-dev
+
+RUN apt-get -y install g++
 
 RUN cmake ../celix-develop -DWITH_APR=OFF -DCURL_LIBRARY=/usr/rootfs.tar-celix/usr/lib/libcurl.so.4 -DZLIB_LIBRARY=/usr/rootfs.tar-celix/usr/lib/libz.so.1 -DUUID_LIBRARY=/usr/rootfs.tar-celix/usr/lib/libuuid.so -DBUILD_SHELL=TRUE -DBUILD_SHELL_TUI=TRUE -DBUILD_REMOTE_SHELL=TRUE -DBUILD_DEPLOYMENT_ADMIN=ON -DCMAKE_INSTALL_PREFIX=/usr/rootfs.tar-celix/usr && \
 	rm -f /usr/celix-build/launcher/CMakeFiles/celix.dir/link.txt && \
